@@ -21,9 +21,26 @@
 
 window.addEventListener("DOMContentLoaded", () => {
   const start = document.querySelector("#start");
+  const timer = document.querySelector("#time");
+  let startingMinutes = 1;
+  let time = startingMinutes * 60;
+  let interval;
   start.addEventListener("click", function (e) {
     document.querySelector("#quizBlock").style.display = "block";
     start.style.display = "none";
+    interval = setInterval(function () {
+      if (time !== 0) {
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        timer.innerText = `${minutes}:${seconds}`;
+        time--;
+      } else {
+        timer.innerText = `Times Up!`;
+        clearInterval(interval);
+        calculateScore();
+      }
+    }, 1000);
   });
 
   const btnSubmit = document.querySelector("#btnSubmit");
@@ -87,7 +104,6 @@ window.addEventListener("DOMContentLoaded", () => {
     let score = 0;
     quizArray.map((quizItem, index) => {
       for (let i = 0; i < 4; i++) {
-        // console.log(i);
         //highlight the li if it is the correct answer
         let li = `li_${index}_${i}`;
         // console.log(index);
@@ -116,11 +132,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   btnSubmit.addEventListener("click", calculateScore);
 
-  btnReset.addEventListener('click', function() {
+  btnReset.addEventListener("click", function () {
     window.location.reload();
   });
   // call the displayQuiz function
   displayQuiz();
-
-  
 });
